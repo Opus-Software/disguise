@@ -1,0 +1,19 @@
+<nav class='navbar'>  
+    <a class='navbar-brand'>
+      <img class='logo' src='../assets/images/disguise_logo_2.png' />
+    </a>
+    <div class='navbar-nav mr-auto'>
+      <span class='nav-item' [routerLink]="['/imposters']" [routerLinkActive]="'active'">
+        <a class='nav-link'>Imposters</a>
+      </span>
+      <span class='nav-item' [routerLink]="['/logs']" [routerLinkActive]="'active'">
+        <a class='nav-link'>Logs</a>
+      </span>
+      <span class='nav-item' [routerLink]="['/about']" [routerLinkActive]="'active'">
+        <a class='nav-link'>About</a>
+      </span>
+    </div>
+</nav>
+<div class='main-container'>
+  <router-outlet></router-outlet>
+</div>

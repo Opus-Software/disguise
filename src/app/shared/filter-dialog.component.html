@@ -1,0 +1,75 @@
+<div class='mHeader'>
+    <div class='form-row'>
+        <h5 class='modal-title font-weight-bold'>Filter</h5>
+        <span class='title-btn text-right'>
+            <label class='btn-text' (click)='cleanAll()'><u>Clean All Filters</u></label>
+        </span>
+    </div>
+</div>
+<div class='mBody'>
+    <div class='form-row'>
+        <a class='font-weight-bold'>Timestamp</a>
+        <label class='ml-2 btn-text' (click)='cleanTimestamp()'><u>Clean</u></label>
+    </div>
+    <div class='form-row'>
+        <div class='w50'>
+            <label for='from'>From</label>
+            <div class='calendar-container text-center' id='from'>
+                <input class='txtA text-center' [ngModel]='filter.timestampFrom | timestamp' (ngModelChange)='filter.timestampFrom=$event' disabled />
+                <button class='btn no-border calendar' [ngbPopover]='fromCalendar' #f='ngbPopover' triggers='manual' (click)='f.open()'[autoClose]="'outside'">
+                    <fa-icon [icon]='faCalendar'></fa-icon>
+                </button>
+                <ng-template #fromCalendar>
+                    <ngb-datepicker [(ngModel)]='date.from' (ngModelChange)='onDateSelect("from")'></ngb-datepicker>
+                    <ngb-timepicker [(ngModel)]='time.from' [seconds]='true' [spinners]='true' (ngModelChange)='onTimeSelect("from")'></ngb-timepicker>
+                </ng-template>
+            </div>
+        </div>
+        <div class='w50'>
+            <label for='to'>To</label>
+            <div class='calendar-container text-center' id='to'>
+                <input class='txtA text-center' [ngModel]='filter.timestampTo | timestamp' (ngModelChange)='filter.timestampFrom=$event' disabled />
+                <button class='btn no-border calendar' [ngbPopover]='toCalendar' #t='ngbPopover' triggers='manual' (click)='t.open()'[autoClose]="'outside'">
+                    <fa-icon [icon]='faCalendar'></fa-icon>
+                </button>
+                <ng-template #toCalendar>
+                    <ngb-datepicker [(ngModel)]='date.to' (ngModelChange)='onDateSelect("to")'></ngb-datepicker>
+                    <ngb-timepicker [(ngModel)]='time.to' [seconds]='true' [spinners]='true' (ngModelChange)='onTimeSelect("to")'></ngb-timepicker>
+                </ng-template>
+            </div>
+        </div>
+    </div>
+    <div class='form-row mt-1'>
+        <a class='font-weight-bold'>Level</a>
+        <label class='ml-2 btn-text' (click)='cleanLevel()'><u>Clean</u></label>
+    </div>
+    <div class='form-row'>
+        <input id='info-radio' class='ml-2 mr-2' value='info' type='radio' [(ngModel)]='filter.level'>
+        <label for='info-radio'>Info</label>
+        <input id='error-radio' class='ml-2 mr-2' value='error' type='radio' [(ngModel)]='filter.level'>
+        <label for='error-radio'>Error</label>
+        <input id='warn-radio' class='ml-2 mr-2' value='warn' type='radio' [(ngModel)]='filter.level'>
+        <label for='warn-radio'>Warn</label>
+        <input id='debug-radio' class='ml-2 mr-2' value='debug' type='radio' [(ngModel)]='filter.level'>
+        <label for='debug-radio'>Debug</label>
+    </div>
+    <div class='form-row mt-1'>        
+        <a class='font-weight-bold'>Imposter</a>
+        <label class='ml-2 btn-text' (click)='cleanImposter()'><u>Clean</u></label>
+    </div>
+    <div class='form-row'>
+        <button class='btn dropdown-toggle' id='impostersDropdown' data-toggle='dropdown'>
+            {{filter.imposter}}
+        </button>
+        <div class='dropdown-menu' aria-labelledby='impostersDropdown'>
+            <a class='dropdown-item' data-toggle='collapse' (click)='filter.imposter = "Choose Imposter"'>Choose Imposter</a>
+            <a class='dropdown-item' data-toggle='collapse' (click)='filter.imposter = "2525"'>Mountebank Port</a>
+            <span *ngFor='let imp of imposters'>
+                <a class='dropdown-item' data-toggle='collapse' (click)='filter.imposter = imp'>{{imp}}</a>
+            </span>
+        </div>
+    </div>
+</div>
+<div class='mFooter'>
+    <button class='btn active' (click)='accept()'>APPLY</button>
+</div>

@@ -1,0 +1,66 @@
+<div class='card'>
+    <span class='return'>
+      <span *ngIf='redirect === 1'>
+        <a class='return-link' (click)='returnImpostersList()'>Imposters</a> / 
+        <a class='font-weight-bold'>Logs</a>
+      </span>
+      <span *ngIf='redirect === 2'>
+        <a class='return-link' (click)='returnImpostersList()'>Imposters</a> / 
+        <a class='return-link' (click)='returnImposterDetails()'>Imposter Details</a> /
+        <a class='font-weight-bold'>Logs</a>
+      </span>
+    </span>
+    <h1 class='card-header font-weight-bold'>Logs</h1>
+    <div class='card-body'>
+      <div class='d-flex justify-content-between'>        
+        <div class='text-center dropdown'>
+          <span>
+            <input class='txtA search-bar' [(ngModel)]='searchFilter' placeholder='Search' />
+            <button class='btn search-btn' (click)='applySearchFilter()'>
+              <fa-icon [icon]='faSearch'></fa-icon>
+            </button>
+          </span>
+          <button class='btn' placement='top' (click)='onFilters()'>
+            <fa-icon [icon]='faFilter'></fa-icon>
+            <span class='text-btn'>Filters</span>
+          </button>
+        </div>
+        <div>
+          <span>
+            <label class="switch">
+              <input type="checkbox" id="box" [(ngModel)]="isChecked" (click)="checkValue()"/>
+              <span class="slider round"></span>             
+            </label>           
+            <span class='txt ml-1'>Auto-Refresh</span>
+          </span>
+          <span>
+            <button class='btn' (click)='refresh()'>
+              <fa-icon [icon]='faSync'></fa-icon>
+              <span class='text-btn'>Refresh List</span>
+            </button>
+          </span>
+        </div>  
+      </div>
+      <div class='panel panel-default'>
+        <table class='table table-bordered table-md'>
+          <thead>
+            <tr>
+              <th class='table-cell tCol1'>Timestamp</th>
+              <th class='table-cell tCol2'>Level</th>
+              <th class='table-cell tCol3'>Imposter</th>
+              <th class='table-cell tCol4'>Message</th>  
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let log of filteredLog | slice: (page-1) * pageSize : (page-1) * pageSize + pageSize ">
+              <td class='table-cell align-middle text-center tCol1'>{{log.timestamp | timestamp}}</td>            
+              <td class='table-cell align-middle tCol2'>{{log.level}}</td>
+              <td class='table-cell align-middle tCol3'>{{log.imposter}}</td>
+              <td class='table-cell align-middle tCol4'>{{log.message}}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <ngb-pagination class='justify-content-center pagination' *ngIf='filteredLog.length > 0' [(page)]='page' [pageSize]='pageSize' [maxSize]='maxSize' [collectionSize]='filteredLog.length'></ngb-pagination>
+    </div>
+</div>

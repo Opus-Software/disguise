@@ -1,0 +1,119 @@
+@import '../../styles.sass'
+
+::ng-deep .add-stub-dialog .modal-content
+    width: 100%
+    margin-top: 12%
+    background-color: $black1
+    color: white
+    font-size: 13px
+    border-color: white
+    border-style: solid
+    border-width: 1px
+    border-radius: 5px
+    padding: 1em
+.btn
+    border-color: white
+    border-width: 1px
+    color: white
+    font-size: 13px
+    margin: 1em
+    &:hover
+        color: white
+    &.no-border
+        border: none
+        color: $main-color
+    &.no-margin
+        margin: 0
+.active
+    background-color: $main-color
+.mFooter
+    margin-top: 1em
+.txtA
+    background-color: $black1
+    color: white
+    &:focus
+        background-color: $black1
+        color: white
+    &:read-only
+        background-color: $black1
+        color: white
+.text-btn
+    color: white
+    margin-left: .2em
+    &:hover
+        color: $main-color
+.field-card
+    border: 1px solid white
+    border-radius: 5px
+    padding: 1em
+.dropdown-toggle
+    color: #495057
+    white-space: normal
+    margin-left: 0
+    margin-top: 0
+    padding-top: .7em
+    padding-bottom: .7em
+.header-card
+    border: 1px solid white
+    padding: 1em
+    border-radius: 5px
+.flex-fill
+    width: 50%
+.dynamic-checkbox
+    .beh-up
+        display: none
+    input[type='checkbox']:checked ~
+        .beh-up
+            display: inline-block
+        .beh-down
+            display: none
+.dropdown-menu
+    color: white
+    background-color: $black1
+.dropdown-item
+    background-color: $black1
+    &:hover
+        background-color: $black2
+.red
+    color: $red
+.header-flex
+    height: 3em
+input:-webkit-autofill
+  -webkit-box-shadow: 0 0 0 30px $black1 inset !important
+  -webkit-text-fill-color: white !important
+  &:hover, &:focus, &:active
+    -webkit-box-shadow: 0 0 0 30px $black1 inset !important
+    -webkit-text-fill-color: white !important
+.txtA::-webkit-scrollbar
+    background-color: $black2
+    width: 12px
+.txtA::-webkit-scrollbar-thumb
+    background-color: $main-color
+    border-radius: 10px
+.txtA::-webkit-scrollbar-corner
+    background-color: $black2
+.del-pred
+    float: right
+.number
+    margin: 0
+    border-right: none
+    padding-right: 10px
+    resize: none
+    width: 45px
+    border-radius: .25rem
+    border-color: white
+    border-top-right-radius: 0
+    border-bottom-right-radius: 0
+    padding-top: 0.375rem
+    padding-bottom: 0.375rem
+    font-size: 1rem
+    color: rgba(256, 256, 256, .5)
+    overflow: hidden
+    &.wider
+        width: 55px
+.numberedTxt
+    border-left: none
+    border-top-left-radius: 0
+    border-bottom-left-radius: 0
+.invalid
+    border-color: #dc3545

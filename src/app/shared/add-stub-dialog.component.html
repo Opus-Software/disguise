@@ -1,0 +1,459 @@
+<div class='mHeader'>
+    <div class='d-flex header-flex'>
+        <div class='flex-fill'>
+            <h5 class='modal-title font-weight-bold'>New Stub</h5>            
+        </div>
+        <div class='flex-fill text-right'>
+            <button class='btn no-border' (click)='decline()'>
+                <fa-icon [icon]='faTimes'></fa-icon>
+            </button>
+        </div>
+    </div>    
+</div>
+<div class='mBody'>
+    <div>
+        <button class='btn' (click)='showObjects()' [ngClass]="{'active': showObject}">JSON Object</button>
+        <button class='btn' (click)='showFields()' [ngClass]="{'active': showField}">Separate Fields</button>
+    </div>
+    <div *ngIf='showObject'>
+        <label for='stubIndex'><b>Index</b> (optional)</label>
+        <label class='invalid-field' *ngIf='!validationFields["index"]'>&nbsp;*must be a number</label>
+        <input class='form-control col-lg-2 txtA' type='text' id='stubIndex' [(ngModel)]='stubIndex' placeholder='Type a index' [ngClass]="{'is-invalid': !validationFields['index']}" />
+        <div>            
+            <label for='stubTextArea' class='font-weight-bold mt-3'>Stub Object</label>
+            <label class='invalid-field ml-2' *ngIf='!validationFields["stubObjSynt"]'>*invalid JSON syntax</label>
+            <div class='d-flex'>
+                <textarea class='number txtA text-right' [(ngModel)]='stubObjectLines' disabled #stubObjLines [ngClass]="{'invalid': !validationFields['stubObjSynt']}"></textarea>
+                <textarea id='stubTextarea' class='form-control txtA numberedTxt' rows=6 [(ngModel)]='stubObject' placeholder='Type a Stub Object' [ngClass]="{'is-invalid': !validationFields['stubObjSynt']}" 
+                    wrap='off' (keyup)='onKey("stubObj")' #stubObjArea (scroll)='stubObjLines.scrollTop = stubObjArea.scrollTop'></textarea>
+            </div>
+        </div>
+    </div>
+    <div *ngIf='showField'>
+        <div class='form-row'>
+            <div class='col-lg-2'>
+                <label for='stubIndex'><b>Index</b> (optional)</label>                
+                <input class='form-control txtA' id='stubIndex' [(ngModel)]='stubIndex' placeholder='Type a index' [ngClass]="{'is-invalid': !validationFields['index']}" />
+                <label class='invalid-field' *ngIf='!validationFields["index"]'>*must be a number</label>
+            </div>
+            <div class='col-lg-6'>
+                <label for='stubDescription'><b>Description</b> (optional)</label>
+                <input class='form-control txtA' id='stubDescription' [(ngModel)]='description' placeholder='Type a description' />
+            </div>
+        </div>
+        <div class='d-flex flex-row stub mt-3'>
+            <div class='flex-fill predicates'>
+                <div class='font-weight-bold'>Predicates</div>
+                <button class='btn no-border' (click)='newPredicate()'>
+                    <fa-icon [icon]='faPlusSquare'></fa-icon>
+                    <span class='text-btn'>New Predicate</span>
+                </button>
+                <div>
+                    <div class='field-card mr-1 mb-4' *ngFor='let pred of predicates; index as i;'>
+                        <span *ngIf='!predicateViewMode[i]'>
+                            <label for='case{{i}}'>
+                                <input type='checkbox' id='case{{i}}' class='mb-2' [(ngModel)]='predicates[i]["caseSensitive"]'>
+                                <a class='ml-1'>Case Sensitive</a>
+                            </label>
+                            <div class='d-flex flex-column'>
+                                <label class='font-weight-bold' for='pred-opt'>Predicate Options</label>
+                                <button class='btn dropdown-toggle col-lg-5' id='predicateDropdown' data-toggle='dropdown'>
+                                    Choose a Predicate Option
+                                </button>
+                                <div class='dropdown-menu' aria-labelledby='predicateDropdown'>
+                                    <a class='dropdown-item' (click)="togglePredicateOption(i, 'equals')">Equals</a>
+                                    <a class='dropdown-item' (click)="togglePredicateOption(i, 'deepEquals')">Deep Equals</a>
+                                    <a class='dropdown-item' (click)="togglePredicateOption(i, 'contains')">Contains</a>
+                                    <a class='dropdown-item' (click)="togglePredicateOption(i, 'startsWith')">Starts With</a>
+                                    <a class='dropdown-item' (click)="togglePredicateOption(i, 'endsWith')">Ends With</a>
+                                    <a class='dropdown-item' (click)="togglePredicateOption(i, 'matches')">Matches</a>
+                                    <a class='dropdown-item' (click)="togglePredicateOption(i, 'exists')">Exists</a>                                
+                                    <a class='dropdown-item' (click)="togglePredicateOption(i, 'not')">Not</a>
+                                    <a class='dropdown-item' (click)="togglePredicateOption(i, 'or')">Or</a>
+                                    <a class='dropdown-item' (click)="togglePredicateOption(i, 'and')">And</a>
+                                    <a class='dropdown-item' (click)="togglePredicateOption(i, 'xpath')">XPath</a>
+                                    <a class='dropdown-item' (click)="togglePredicateOption(i, 'jsonpath')">JsonPath</a>
+                                    <a class='dropdown-item' (click)="togglePredicateOption(i, 'inject')">Inject</a>
+                                </div>
+                            </div>
+                            <div>
+                                <div class='mt-2' *ngIf='predicateOptions[i]["equals"]'>
+                                    <div class='d-flex justify-content-between'>
+                                        <span>
+                                            <label class='align-middle' for='equals'><i>Equals</i> Object</label>
+                                            <label class='invalid-field' *ngIf='!validationFields["equals"][i]'>&nbsp;*invalid object syntax</label>
+                                        </span>
+                                        <span>
+                                            <button class='m-0 mb-3 btn no-border' (click)="deletePredicateOption(i, 'equals')">
+                                                <fa-icon [icon]='faTrash'></fa-icon>
+                                            </button>
+                                        </span>
+                                    </div>
+                                    <div class='d-flex'>
+                                        <textarea class='number wider txtA text-right' [(ngModel)]='predicateOptionsLines[i]["equals"]' disabled #equalsLines [ngClass]="{'invalid': !validationFields['equals'][i]}"></textarea>
+                                        <textarea class='form-control txtA numberedTxt' [(ngModel)]='predicates[i]["equals"]' rows=6 [ngClass]="{'is-invalid': !validationFields['equals'][i]}"
+                                            wrap='off' #equalsArea (keyup)='onKey("predBody", i, "equals")' (scroll)='equalsLines.scrollTop = equalsArea.scrollTop'></textarea>
+                                    </div> 
+                                </div>
+                                <div class='mt-4' *ngIf='predicateOptions[i]["deepEquals"]'>
+                                    <div class='d-flex justify-content-between'>
+                                        <span>
+                                            <label class='align-middle' for='deepEquals'><i>Deep Equals</i> Object</label>
+                                            <label class='invalid-field' *ngIf='!validationFields["deepEquals"][i]'>&nbsp;*invalid object syntax</label>
+                                        </span>
+                                        <span>
+                                            <button class='m-0 mb-3 btn no-border' (click)="deletePredicateOption(i, 'deepEquals')">
+                                                <fa-icon [icon]='faTrash'></fa-icon>
+                                            </button>
+                                        </span>
+                                    </div>
+                                    <div class='d-flex'>
+                                        <textarea class='number wider txtA text-right' [(ngModel)]='predicateOptionsLines[i]["deepEquals"]' disabled #deepEqualsLines [ngClass]="{'invalid': !validationFields['deepEquals'][i]}"></textarea>
+                                        <textarea class='form-control txtA numberedTxt' [(ngModel)]='predicates[i]["deepEquals"]' rows=6 [ngClass]="{'is-invalid': !validationFields['deepEquals'][i]}"
+                                            wrap='off' #deepEqualsArea (keyup)='onKey("predBody", i, "deepEquals")' (scroll)='deepEqualsLines.scrollTop = deepEqualsArea.scrollTop'></textarea>
+                                    </div>
+                                </div>
+                                <div class='mt-4' *ngIf='predicateOptions[i]["contains"]'>
+                                    <div class='d-flex justify-content-between'>
+                                        <span>
+                                            <label class='align-middle' for='contains'><i>Contains</i> Object</label>
+                                            <label class='invalid-field' *ngIf='!validationFields["contains"][i]'>&nbsp;*invalid object syntax</label>
+                                        </span>
+                                        <span>
+                                            <button class='m-0 mb-3 btn no-border' (click)="deletePredicateOption(i, 'contains')">
+                                                <fa-icon [icon]='faTrash'></fa-icon>
+                                            </button>
+                                        </span>
+                                    </div>
+                                    <div class='d-flex'>
+                                        <textarea class='number wider txtA text-right' [(ngModel)]='predicateOptionsLines[i]["contains"]' disabled #containsLines [ngClass]="{'invalid': !validationFields['contains'][i]}"></textarea>
+                                        <textarea class='form-control txtA numberedTxt' [(ngModel)]='predicates[i]["contains"]' rows=6 [ngClass]="{'is-invalid': !validationFields['contains'][i]}"
+                                            wrap='off' #containsArea (keyup)='onKey("predBody", i, "contains")' (scroll)='containsLines.scrollTop = containsArea.scrollTop'></textarea>
+                                    </div>
+                                </div>
+                                <div class='mt-4' *ngIf='predicateOptions[i]["startsWith"]'>
+                                    <div class='d-flex justify-content-between'>
+                                        <span>
+                                            <label class='align-middle' for='startsWith'><i>Starts With</i> Object</label>
+                                            <label class='invalid-field' *ngIf='!validationFields["startsWith"][i]'>&nbsp;*invalid object syntax</label>
+                                        </span>
+                                        <span>
+                                            <button class='m-0 mb-3 btn no-border' (click)="deletePredicateOption(i, 'startsWith')">
+                                                <fa-icon [icon]='faTrash'></fa-icon>
+                                            </button>
+                                        </span>
+                                    </div>
+                                    <div class='d-flex'>
+                                        <textarea class='number wider txtA text-right' [(ngModel)]='predicateOptionsLines[i]["startsWith"]' disabled #startsWithLines [ngClass]="{'invalid': !validationFields['startsWith'][i]}"></textarea>
+                                        <textarea class='form-control txtA numberedTxt' [(ngModel)]='predicates[i]["startsWith"]' rows=6 [ngClass]="{'is-invalid': !validationFields['startsWith'][i]}"
+                                            wrap='off' #startsWithArea (keyup)='onKey("predBody", i, "startsWith")' (scroll)='startsWithLines.scrollTop = startsWithArea.scrollTop'></textarea>
+                                    </div>
+                                </div>
+                                <div class='mt-4' *ngIf='predicateOptions[i]["endsWith"]'>
+                                    <div class='d-flex justify-content-between'>
+                                        <span>
+                                            <label class='align-middle' for='endsWith'><i>Ends With</i> Object</label>
+                                            <label class='invalid-field' *ngIf='!validationFields["endsWith"][i]'>&nbsp;*invalid object syntax</label>
+                                        </span>
+                                        <span>
+                                            <button class='m-0 mb-3 btn no-border' (click)="deletePredicateOption(i, 'endsWith')">
+                                                <fa-icon [icon]='faTrash'></fa-icon>
+                                            </button>
+                                        </span>
+                                    </div>
+                                    <div class='d-flex'>
+                                        <textarea class='number wider txtA text-right' [(ngModel)]='predicateOptionsLines[i]["endsWith"]' disabled #endsWithLines [ngClass]="{'invalid': !validationFields['endsWith'][i]}"></textarea>
+                                        <textarea class='form-control txtA numberedTxt' [(ngModel)]='predicates[i]["endsWith"]' rows=6 [ngClass]="{'is-invalid': !validationFields['endsWith'][i]}"
+                                            wrap='off' #endsWithArea (keyup)='onKey("predBody", i, "endsWith")' (scroll)='endsWithLines.scrollTop = endsWithArea.scrollTop'></textarea>
+                                    </div>
+                                </div>
+                                <div class='mt-4' *ngIf='predicateOptions[i]["matches"]'>
+                                    <div class='d-flex justify-content-between'>
+                                        <span>
+                                            <label class='align-middle' for='matches'><i>Matches</i> Object</label>
+                                            <label class='invalid-field' *ngIf='!validationFields["matches"][i]'>&nbsp;*invalid object syntax</label>
+                                        </span>
+                                        <span>
+                                            <button class='m-0 mb-3 btn no-border' (click)="deletePredicateOption(i, 'matches')">
+                                                <fa-icon [icon]='faTrash'></fa-icon>
+                                            </button>
+                                        </span>
+                                    </div>
+                                    <div class='d-flex'>
+                                        <textarea class='number wider txtA text-right' [(ngModel)]='predicateOptionsLines[i]["matches"]' disabled #matchesLines [ngClass]="{'invalid': !validationFields['matches'][i]}"></textarea>
+                                        <textarea class='form-control txtA numberedTxt' [(ngModel)]='predicates[i]["matches"]' rows=6 [ngClass]="{'is-invalid': !validationFields['matches'][i]}"
+                                            wrap='off' #matchesArea (keyup)='onKey("predBody", i, "matches")' (scroll)='matchesLines.scrollTop = matchesArea.scrollTop'></textarea>
+                                    </div>
+                                </div>
+                                <div class='mt-4' *ngIf='predicateOptions[i]["exists"]'>
+                                    <div class='d-flex justify-content-between'>
+                                        <span>
+                                            <label class='align-middle' for='exists'><i>Exists</i> Object</label>
+                                            <label class='invalid-field' *ngIf='!validationFields["exists"][i]'>&nbsp;*invalid object syntax</label>
+                                        </span>
+                                        <span>
+                                            <button class='m-0 mb-3 btn no-border' (click)="deletePredicateOption(i, 'exists')">
+                                                <fa-icon [icon]='faTrash'></fa-icon>
+                                            </button>
+                                        </span>
+                                    </div>
+                                    <div class='d-flex'>
+                                        <textarea class='number wider txtA text-right' [(ngModel)]='predicateOptionsLines[i]["exists"]' disabled #existsLines [ngClass]="{'invalid': !validationFields['exists'][i]}"></textarea>
+                                        <textarea class='form-control txtA numberedTxt' [(ngModel)]='predicates[i]["exists"]' rows=6 [ngClass]="{'is-invalid': !validationFields['exists'][i]}"
+                                            wrap='off' #existsArea (keyup)='onKey("predBody", i, "exists")' (scroll)='existsLines.scrollTop = existsArea.scrollTop'></textarea>
+                                    </div>
+                                </div>
+                                <div class='mt-4' *ngIf='predicateOptions[i]["not"]'>
+                                    <div class='d-flex justify-content-between'>
+                                        <span>
+                                            <label class='align-middle' for='not'><i>Not</i> Object</label>
+                                            <label class='invalid-field' *ngIf='!validationFields["not"][i]'>&nbsp;*invalid object syntax</label>
+                                        </span>
+                                        <span>
+                                            <button class='m-0 mb-3 btn no-border' (click)="deletePredicateOption(i, 'not')">
+                                                <fa-icon [icon]='faTrash'></fa-icon>
+                                            </button>
+                                        </span>
+                                    </div>
+                                    <div class='d-flex'>
+                                        <textarea class='number wider txtA text-right' [(ngModel)]='predicateOptionsLines[i]["not"]' disabled #notLines [ngClass]="{'invalid': !validationFields['not'][i]}"></textarea>
+                                        <textarea class='form-control txtA numberedTxt' [(ngModel)]='predicates[i]["not"]' rows=6 [ngClass]="{'is-invalid': !validationFields['not'][i]}"
+                                            wrap='off' #notArea (keyup)='onKey("predBody", i, "not")' (scroll)='notLines.scrollTop = notArea.scrollTop'></textarea>
+                                    </div>
+                                </div>
+                                <div class='mt-4' *ngIf='predicateOptions[i]["or"]'>
+                                    <div class='d-flex justify-content-between'>
+                                        <span>
+                                            <label class='align-middle' for='or'><i>Or</i> Object</label>
+                                            <label class='invalid-field' *ngIf='!validationFields["or"][i]'>&nbsp;*invalid object syntax</label>
+                                        </span>
+                                        <span>
+                                            <button class='m-0 mb-3 btn no-border' (click)="deletePredicateOption(i, 'or')">
+                                                <fa-icon [icon]='faTrash'></fa-icon>
+                                            </button>
+                                        </span>
+                                    </div>
+                                    <div class='d-flex'>
+                                        <textarea class='number wider txtA text-right' [(ngModel)]='predicateOptionsLines[i]["or"]' disabled #orLines [ngClass]="{'invalid': !validationFields['or'][i]}"></textarea>
+                                        <textarea class='form-control txtA numberedTxt' [(ngModel)]='predicates[i]["or"]' rows=6 [ngClass]="{'is-invalid': !validationFields['or'][i]}"
+                                            wrap='off' #orArea (keyup)='onKey("predBody", i, "or")' (scroll)='orLines.scrollTop = orArea.scrollTop'></textarea>
+                                    </div>
+                                </div>
+                                <div class='mt-4' *ngIf='predicateOptions[i]["and"]'>
+                                    <div class='d-flex justify-content-between'>
+                                        <span>
+                                            <label class='align-middle' for='and'><i>And</i> Object</label>
+                                            <label class='invalid-field' *ngIf='!validationFields["and"][i]'>&nbsp;*invalid object syntax</label>
+                                        </span>
+                                        <span>
+                                            <button class='m-0 mb-3 btn no-border' (click)="deletePredicateOption(i, 'and')">
+                                                <fa-icon [icon]='faTrash'></fa-icon>
+                                            </button>
+                                        </span>
+                                    </div>
+                                    <div class='d-flex'>
+                                        <textarea class='number wider txtA text-right' [(ngModel)]='predicateOptionsLines[i]["and"]' disabled #andLines [ngClass]="{'invalid': !validationFields['and'][i]}"></textarea>
+                                        <textarea class='form-control txtA numberedTxt' [(ngModel)]='predicates[i]["and"]' rows=6 [ngClass]="{'is-invalid': !validationFields['and'][i]}"
+                                            wrap='off' #andArea (keyup)='onKey("predBody", i, "and")' (scroll)='andLines.scrollTop = andArea.scrollTop'></textarea>
+                                    </div>
+                                </div>
+                                <div class='mt-4' *ngIf='predicateOptions[i]["xpath"]'>
+                                    <div class='d-flex justify-content-between'>
+                                        <span>
+                                            <label class='align-middle' for='xpath'><i>XPath</i> Object</label>
+                                            <label class='invalid-field' *ngIf='!validationFields["xpath"][i]'>&nbsp;*invalid object syntax</label>
+                                        </span>
+                                        <span>
+                                            <button class='m-0 mb-3 btn no-border' (click)="deletePredicateOption(i, 'xpath')">
+                                                <fa-icon [icon]='faTrash'></fa-icon>
+                                            </button>
+                                        </span>
+                                    </div>
+                                    <div class='d-flex'>
+                                        <textarea class='number wider txtA text-right' [(ngModel)]='predicateOptionsLines[i]["xpath"]' disabled #xpathLines [ngClass]="{'invalid': !validationFields['xpath'][i]}"></textarea>
+                                        <textarea class='form-control txtA numberedTxt' [(ngModel)]='predicates[i]["xpath"]' rows=6 [ngClass]="{'is-invalid': !validationFields['xpath'][i]}"
+                                            wrap='off' #xpathArea (keyup)='onKey("predBody", i, "xpath")' (scroll)='xpathLines.scrollTop = xpathArea.scrollTop'></textarea>
+                                    </div>
+                                </div>
+                                <div class='mt-4' *ngIf='predicateOptions[i]["jsonpath"]'>
+                                    <div class='d-flex justify-content-between'>
+                                        <span>
+                                            <label class='align-middle' for='jsonpath'><i>JsonPath</i> Object</label>
+                                            <label class='invalid-field' *ngIf='!validationFields["jsonpath"][i]'>&nbsp;*invalid object syntax</label>
+                                        </span>
+                                        <span>
+                                            <button class='m-0 mb-3 btn no-border' (click)="deletePredicateOption(i, 'jsonpath')">
+                                                <fa-icon [icon]='faTrash'></fa-icon>
+                                            </button>
+                                        </span>
+                                    </div>
+                                    <div class='d-flex'>
+                                        <textarea class='number wider txtA text-right' [(ngModel)]='predicateOptionsLines[i]["jsonpath"]' disabled #jsonpathLines [ngClass]="{'invalid': !validationFields['jsonpath'][i]}"></textarea>
+                                        <textarea class='form-control txtA numberedTxt' [(ngModel)]='predicates[i]["jsonpath"]' rows=6 [ngClass]="{'is-invalid': !validationFields['jsonpath'][i]}"
+                                            wrap='off' #jsonpathArea (keyup)='onKey("predBody", i, "jsonpath")' (scroll)='jsonpathLines.scrollTop = jsonpathArea.scrollTop'></textarea>
+                                    </div>
+                                </div>                        
+                                <div class='mt-4' *ngIf='predicateOptions[i]["inject"]'>
+                                    <div class='d-flex justify-content-between'>
+                                        <span>
+                                            <label class='align-middle' for='Inject'><i>Inject</i> Object</label>
+                                        </span>
+                                        <span>
+                                            <button class='m-0 mb-3 btn no-border' (click)="deletePredicateOption(i, 'inject')">
+                                                <fa-icon [icon]='faTrash'></fa-icon>
+                                            </button>
+                                        </span>
+                                    </div>
+                                    <div class='d-flex'>
+                                        <textarea class='number wider txtA text-right' [(ngModel)]='predicateOptionsLines[i]["inject"]' disabled #injectLines></textarea>
+                                        <textarea class='form-control txtA numberedTxt' [(ngModel)]='predicates[i]["inject"]' rows=6 wrap='off' #injectArea (keyup)='onKey("predBody", i, "inject")'
+                                            (scroll)='injectLines.scrollTop = injectArea.scrollTop'></textarea>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class='form-row'>
+                                <button class='btn' (click)='removePredicate(i)'>{{ btnCancelText }}</button>
+                                <button class='btn active' (click)='onAcceptPredicate(i)'>{{ btnOkText }}</button>
+                            </div>
+                        </span>
+                        <span *ngIf='predicateViewMode[i]'>
+                            <div class='text-right'>
+                                <button class='btn no-border no-margin' (click)='onEditDonePredicate(i)'>
+                                    <fa-icon [icon]='faPen'></fa-icon>
+                                </button>
+                                <button class='btn no-border no-margin' (click)='removePredicate(i)'>
+                                    <fa-icon [icon]='faTrash'></fa-icon>
+                                </button>
+                                <div class='d-flex'>
+                                    <textarea class='number wider txtA text-right mt-2' [(ngModel)]='donePredicateLines[i]' disabled #donePredLines></textarea>
+                                    <textarea class='form-control txtA numberedTxt mt-2' rows=5 readonly wrap='off' #donePredArea (scroll)='donePredLines.scrollTop = donePredArea.scrollTop'>{{donePredicates[i] | json}}</textarea>
+                                </div>
+                            </div>
+                        </span>                       
+                    </div>                  
+                </div>
+            </div>
+            <div class='flex-fill responses'>
+                <div class='font-weight-bold'>Responses</div>
+                <button class='btn no-border' id='newResponse' (click)='newResponse()'>
+                    <fa-icon [icon]='faPlusSquare'></fa-icon>
+                    <span class='text-btn'>New Response</span>
+                </button>
+                <div>
+                    <div class='field-card ml-1 mb-4' *ngFor='let resp of responses; index as i'>
+                        <span *ngIf='!responseViewMode[i]'>
+                            <div class='form-row ml-1'>
+                                <label class='font-weight-bold' for='statusCode'>Status Code</label>
+                                <label class='invalid-field' *ngIf='!validationFields["status"][i]'>&nbsp;*must be a number</label>                                                               
+                            </div>
+                            <input class='form-control col-lg-5 txtA' id='statusCode' [(ngModel)]='responses[i]["statusCode"]' placeholder='Type the Status Code' [ngClass]="{'is-invalid': !validationFields['status'][i]}" />
+                            <button class='btn no-border' id='newHeader' (click)='addHeader(i)'>
+                                <fa-icon [icon]='faPlusSquare'></fa-icon>
+                                <span class='text-btn'>Add Header</span>
+                            </button>
+                            <div class='header-card mb-2' *ngIf='responses[i]["headers"].length > 0'>
+                                <div class='form-row mb-1' *ngFor='let header of responses[i]["headers"]; index as j'>
+                                    <div class='col-lg-5'>
+                                        <label class='font-weight-bold' for='header-name'>Name</label>
+                                        <input class='form-control txtA' id='header-name' placeholder='Type the Header Name' [(ngModel)]='header[0]' />
+                                    </div>
+                                    <div class='col-lg-5'>
+                                        <label class='font-weight-bold' for='header-value'>Value</label>
+                                        <input class='form-control txtA' id='header-value' placeholder='Type the Header Value' [(ngModel)]='header[1]' />  
+                                    </div>  
+                                    <div class='col-lg-1 text-right'>
+                                        <button class='btn no-border' (click)='removeHeader(i, j)'>
+                                            <fa-icon [icon]='faTrash'></fa-icon>
+                                        </button>
+                                    </div>                              
+                                </div>
+                            </div>
+                            <div class='form-row ml-1'>
+                                <label class='font font-weight-bold' for='resp-body'>Body</label>
+                                <label class='invalid-field' *ngIf='!validationFields["bodyObj"][i]'>&nbsp;*invalid JSON syntax</label>
+                            </div>                        
+                            <div class='mb-2'>
+                                <label for='objectType{{i}}'>
+                                    <input value='object' id='objectType{{i}}' name='bodyType{{i}} 'type='radio' [(ngModel)]='responses[i]["bodyType"]' />
+                                    <a class='ml-1 mr-2'>Object</a>
+                                </label>                       
+                                <label for='stringType{{i}}'>
+                                    <input value='string' id='stringType{{i}}' name='bodyType{{i}}' type='radio' [(ngModel)]='responses[i]["bodyType"]' />
+                                    <a class='ml-1'>String</a>
+                                </label>                            
+                            </div>
+                            <div class='d-flex'>
+                                <textarea class='number wider txtA text-right mb-2' [(ngModel)]='responseBodyLines[i]' disabled #respBodyLines [ngClass]="{'invalid': !validationFields['bodyObj'][i]}"></textarea>
+                                <textarea class='form-control txtA numberedTxt mb-2' id='resp-body' [(ngModel)]='responses[i]["body"]' rows=7 [ngClass]="{'is-invalid': !validationFields['bodyObj'][i]}"
+                                    wrap='off' (keyup)='onKey("respBody", i)' #respBodyArea (scroll)='respBodyLines.scrollTop = respBodyArea.scrollTop'></textarea>
+                            </div>                            
+                            <div class='form-row ml-1'>                            
+                                <label class='dynamic-checkbox' for='behaviors-check{{i}}'>
+                                    <input type='checkbox' id='behaviors-check{{i}}' data-toggle='collapse' [attr.data-target]="'#behaviors'+i">
+                                    <a class='mr-1 ml-1'>Behaviors</a>
+                                    <fa-icon class='beh-down' [icon]='faCaretDown'></fa-icon>
+                                    <fa-icon class='beh-up' [icon]='faCaretUp'></fa-icon>
+                                </label>
+                            </div>
+                            <div class='behaviors mt-1 collapse' id='behaviors{{i}}'>
+                                <div class='form-row'>
+                                    <div class='col-lg-5'>
+                                        <label class='font-weight-bold' for='wait'>Wait</label>
+                                        <input class='form-control txtA' id='wait' placeholder='Type Wait Behavior' [(ngModel)]='responses[i]["wait"]'>
+                                    </div>
+                                    <div class='col-lg-5'>
+                                        <label class='font-weight-bold' for='decorate'>Decorate</label>
+                                        <input class='form-control txtA' id='decorate' placeholder='Type Decorate Behavior' [(ngModel)]='responses[i]["decorate"]'>
+                                    </div>
+                                </div>
+                                <div class='form-row mt-2'>
+                                    <div class='col-lg-5'>
+                                        <label class='font-weight-bold' for='repeat'>Repeat</label>
+                                        <input class='form-control txtA' id='repeat' placeholder='Type Repeat Behavior' [(ngModel)]='responses[i]["repeat"]' [ngClass]="{'is-invalid': !validationFields['repeat'][i]}" />
+                                        <label class='invalid-field' *ngIf='!validationFields["repeat"][i]'>*must be a positive number</label>
+                                    </div>
+                                    <div class='col-lg-5'>
+                                        <label class='font-weight-bold' for='shell'>Shell Transform</label>
+                                        <input class='form-control txtA' id='shell' placeholder='Type Shell Transform Behavior' [(ngModel)]='responses[i]["shellTransform"]'>
+                                    </div>
+                                </div>
+                                <div class='form-row mt-2'>
+                                    <label class='font-weight-bold' for='copy'>Copy</label>
+                                    <label class='invalid-field' *ngIf='!validationFields["copy"][i]'>&nbsp;*invalid syntax</label>
+                                    <textarea class='txtA form-control' placeholder='Type Copy Behavior' [(ngModel)]='responses[i]["copy"]' rows=4 [ngClass]="{'is-invalid': !validationFields['copy'][i]}" wrap='off'></textarea>
+                                </div>
+                                <div class='form-row mt-2'>
+                                    <label class='font-weight-bold' for='lookup'>Lookup</label>
+                                    <label class='invalid-field' *ngIf='!validationFields["lookup"][i]'>&nbsp;*invalid syntax</label>
+                                    <textarea class='form-control txtA' placeholder='Type Lookup Behavior' [(ngModel)]='responses[i]["lookup"]' rows=4 [ngClass]="{'is-invalid': !validationFields['lookup'][i]}" wrap='off'></textarea>
+                                </div>
+                            </div>
+                            <div class='form-row'>
+                                <button class='btn' (click)='removeResponse(i)'>{{ btnCancelText }}</button>
+                                <button class='btn active' (click)='onAcceptResponse(i)'>{{ btnOkText }}</button>
+                            </div>
+                        </span>
+                        <span *ngIf='responseViewMode[i]'>
+                            <div class='text-right'>
+                                <button class='btn no-border no-margin' (click)='onEditDoneResponse(i)'>
+                                    <fa-icon [icon]='faPen'></fa-icon>
+                                </button>
+                                <button class='btn no-border no-margin' (click)='removeResponse(i)'>
+                                    <fa-icon [icon]='faTrash'></fa-icon>
+                                </button>
+                                <div class='d-flex'>
+                                    <textarea class='number wider txtA text-right mt-2' [(ngModel)]='doneResponseLines[i]' disabled #doneRespLines></textarea>
+                                    <textarea class='form-control txtA numberedTxt mt-2' rows=5 readonly wrap='off' #doneRespArea (scroll)='doneRespLines.scrollTop = doneRespArea.scrollTop'>{{doneResponses[i] | json}}</textarea>
+                                </div>                                
+                            </div>
+                        </span>                                              
+                    </div>                  
+                </div>              
+            </div>            
+        </div>
+    </div>
+</div>
+<div class='mFooter'>
+    <button class='btn' (click)='decline()'>{{ btnCancelText }}</button>
+    <button class='btn active' (click)='accept()'>{{ btnOkText }}</button>
+</div>

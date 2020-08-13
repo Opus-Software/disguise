@@ -1,0 +1,67 @@
+<div class='card'>
+  <h1 class='card-header font-weight-bold'>Imposters</h1>
+  <div class='card-body'>
+    <div class='row'>
+      <div class='col1'>
+        <span>
+          <button class='btn' (click)='onAddImposter()'>
+            <fa-icon [icon]='faPlusSquare'></fa-icon>
+            <span class='text-btn'>New Imposter</span>
+          </button>
+        </span>
+        <span>
+          <button class='btn' (click)='downloadImposters()'>
+            <fa-icon [icon]='faFileDownload'></fa-icon>
+            <span class='text-btn'>Download Current Config</span>
+          </button>
+        </span>
+        <span>
+          <button class='btn' (click)='uploadImposters()'>
+            <fa-icon [icon]='faFileUpload'></fa-icon>
+            <span class='text-btn'>Upload Config File</span>
+          </button>
+        </span>  
+      </div>   
+      <div class='col2 text-right'>
+        <span>
+          <button class='btn' placement='top' (click)='refresh()'>
+            <fa-icon [icon]='faSyncAlt'></fa-icon>
+            <span class='text-btn'>Refresh List</span>
+          </button>
+        </span>    
+      </div>   
+    </div>       
+    <div class='panel panel-default' *ngIf='imposters.length > 0'>
+      <table class='table table-md table-bordered'>
+        <thead>
+          <tr>    
+            <th class='table-cell tCol1'>Port</th> 
+            <th class='table-cell tCol2'>Protocol</th>
+            <th class='table-cell tCol3'>Name</th>
+            <th class='table-cell tCol4'>Options</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor='let imposter of imposters | slice: (page-1) * pageSize : (page-1) * pageSize + pageSize; index as i'>
+            <td class='table-cell align-middle tCol1'><a>{{ imposter["port"] }}</a></td>                        
+            <td class='table-cell align-middle tCol2'>{{ imposter["protocol"] }}</td>
+            <td class='table-cell align-middle tCol3'>{{ imposter["name"] }}</td>
+            <td class='table-cell align-middle tCol4'>
+              <button type='button' class='btn' placement='top' ngbTooltip='View Logs' tooltipClass='btn-tooltip' (click)='viewLogs(imposter["port"])'>
+                <fa-icon [icon]='faList'></fa-icon>
+              </button>                                                       
+              <button type='button' class='btn' (click)='onImposterDetail(imposter["port"])'>
+                <fa-icon [icon]='faInfoCircle'></fa-icon>
+              </button>                       
+              <button type='button' class='btn' (click)='deleteImposter(imposter["port"])'>
+                <fa-icon [icon]='faTrash'></fa-icon>
+              </button>  
+            </td>
+          </tr>
+        </tbody>
+      </table>
+      <ngb-pagination class='justify-content-center pagination' [(page)]='page' [pageSize]='pageSize' [collectionSize]='imposters.length'></ngb-pagination>
+    </div>        
+    <h3 class='text-center' *ngIf='imposters.length == 0'>There are no imposters running at the moment.</h3>    
+  </div>
+</div>

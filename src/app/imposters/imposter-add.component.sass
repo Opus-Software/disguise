@@ -1,0 +1,50 @@
+@import '../../styles.sass'
+
+.card-body
+    color: $white
+.return
+    padding-left: 1.25rem
+    padding-right: 1.25rem
+    margin-top: 1.5em
+    color: white
+    font-size: 12px
+.return-link
+    cursor: pointer
+.btn
+    border-color: white
+    border-width: 1px
+    color: white
+    font-size: 13px
+    margin: 1em
+    &:hover
+        color: white
+    &.no-border
+        border: none
+        color: $main-color
+    &.no-margin
+        margin: 0
+.active
+    background-color: $main-color
+.txtA
+    background-color: $black1
+    color: white
+    &:focus
+        background-color: $black1
+        color: white
+    &:read-only
+        background-color: $black1
+        color: white
+input:-webkit-autofill
+  -webkit-box-shadow: 0 0 0 30px $black1 inset !important
+  -webkit-text-fill-color: white !important
+  &:hover, &:focus, &:active
+    -webkit-box-shadow: 0 0 0 30px $black1 inset !important
+    -webkit-text-fill-color: white !important
+.txtA::-webkit-scrollbar
+    background-color: $black2
+    width: 12px
+.txtA::-webkit-scrollbar-thumb
+    background-color: $main-color
+    border-radius: 10px
+.txtA::-webkit-scrollbar-corner
+    background-color: $black2

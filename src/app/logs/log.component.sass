@@ -1,0 +1,158 @@
+@import "../../styles.sass"
+ 
+.return
+    padding-left: 1.25rem
+    padding-right: 1.25rem
+    margin-top: 1.5em
+    color: white
+    font-size: 12px
+.return-link
+    cursor: pointer
+.switch 
+  position: relative
+  display: inline-block
+  width: 40px
+  height: 22px
+  border: 1px solid $grey
+  border-radius: 34px
+
+.switch input  
+  opacity: 0
+  width: 0
+  height: 0
+
+.slider 
+  position: absolute
+  cursor: pointer
+  top: 0
+  left: 0
+  right: 0
+  bottom: 0
+  background-color: $black2
+  -webkit-transition: .4s
+  transition: .4s
+
+.slider:before 
+  position: absolute
+  content: ""
+  height: 16px
+  width: 16px
+  left: 2px
+  bottom: 2px
+  background-color: $grey
+  -webkit-transition: .4s
+  transition: .4s
+
+input:checked + .slider 
+  background-color: $main-color
+
+input:focus + .slider 
+  box-shadow: 0 0 1px $main-color
+
+input:checked + .slider:before 
+  -webkit-transform: translateX(16px)
+  -ms-transform: translateX(16px)
+  transform: translateX(16px)
+
+/* Rounded sliders */
+.slider.round 
+  border-radius: 34px
+
+.slider.round:before 
+  border-radius: 50%
+
+.dropdown-item
+  background-color: $black1
+  &:hover
+    background-color: $black2
+
+.dropdown-menu
+  background-color: $black1
+  color: $main-color
+
+.messageFilter
+  width: 90%
+
+.calendar-btn
+  background-color: $black1
+  color: $main-color
+  border: .05em solid $main-color
+
+::ng-deep .ngb-tp
+  background-color: $black1
+  color: $main-color
+::ng-deep .btn-link
+  color: $main-color
+  &:hover
+    color: $black1
+::ng-deep .ngb-tp-input
+  background-color: $grey
+  border: none
+  color: $black1
+  &:focus
+    background-color: $main-color
+    color: $black
+::ng-deep .popover-body
+  background-color: $black1
+  border: 2px solid white
+::ng-deep .ngb-dp-arrow-btn
+  color: $main-color
+  &:hover
+    color: $black1
+    background-color: $main-color
+::ng-deep ngb-datepicker > .ngb-dp-header
+    background-color: $black1
+ngb-datepicker
+  border: none
+::ng-deep .ngb-dp-weekday.small
+  background-color: $black2
+  color: $grey
+::ng-deep [ngbDatepickerDayView].outside
+  color: red
+::ng-deep .ngb-dp-week.ngb-dp-weekdays
+  background-color: $black2
+  margin-top: 5px
+::ng-deep .btn-light
+  color: $grey
+  &:hover
+    background-color: $main-color
+    color: $black1
+::ng-deep .btn-light
+  &:active
+    background-color: $main-color
+::ng-deep .custom-select
+  background-color: $grey
+  border: none
+  color: $black
+.table-cell
+  font-size: 14px
+.text-btn
+  color: white
+  margin-left: .2em
+  &:hover
+    color: $main-color
+.tCol1
+    width: 18%
+.tCol2
+    width: 5%
+.tCol3
+    width: 15%
+.tCol4
+    width: 62%
+.txt
+  color: white
+.txtA
+    background-color: $black1
+    color: white
+    &:focus
+        background-color: $black1
+        color: white
+.search-btn
+  color: white
+  border: none
+  border-color: white
+.search-bar
+  border-top: 1em
+  border-left: 1em
+  border-right: 1em
+  border-color: white

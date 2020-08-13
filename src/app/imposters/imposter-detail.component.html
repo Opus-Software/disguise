@@ -1,0 +1,256 @@
+<div class='card'>
+    <span class='return'>
+        <a class='return-link' (click)='return()'>Imposters</a> /
+        <a class='font-weight-bold'>Imposter Details</a>
+    </span>
+    <h1 class='card-header font-weight-bold'>Imposter Details</h1>
+    <div class='card-body'>
+        <div class='text-right mb-3 mr-3'>
+            <h3 class="text-left">Imposter Data</h3>
+        </div>
+        <div class="table-editable col border">
+            <table class='table borderless'>
+                <tbody>
+                    <tr>
+                        <th class='font-weight-bold tCol1'>Port:</th>
+                        <th class='font-weight-bold tCol1'>Protocol:</th>
+                        <th class='font-weight-bold tCol1'>Name:</th>
+                        <th></th>
+                    </tr>
+                    <tr>
+                        <td class='tCol1'>{{ imposter["port"] }}</td>
+                        <td class='tCol1'>{{ imposter["protocol"] }}</td>
+                        <td class='tCol1'>{{ imposter["name"] }}</td>
+                        <td></td>
+                    </tr>
+                </tbody>
+            </table>
+            <table class='table borderless'>
+                <tbody>
+                    <tr>
+                        <th class='font-weight-bold tCol2'>Record Requests:</th>
+                        <th class='font-weight-bold tCol2'>Number of Requests:</th>
+                        <th></th>
+                    </tr>
+                    <tr>
+                        <td class='tCol2'>
+                            <a class='mr-4'>{{ imposter["recordRequests"] }}</a>
+                            <label (click)='getRequests()' *ngIf='imposter["recordRequests"] === true || imposter["recordRequests"] === "true"'
+                                class='btn-text' data-toggle='modal' [attr.data-target]="'#requestModal'"><u>View Requests</u></label>                        
+                        </td>
+                        <td class='tCol2'>{{ imposter["numberOfRequests"] }}</td>
+                    </tr>
+                </tbody>
+            </table>
+            <div class="row border-top">
+                <fa-icon class='ml-2 mr-2 mt-2' [icon]='faSearch'></fa-icon>
+                <label class='btn-text mt-2' (click)='viewLogs(imposter["port"])'><u>View Logs</u></label>
+            </div>
+            <div class="modal fade" id="requestModal" tabindex="-1" role="dialog"
+                aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <div class="modal-dialog modal-xl">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h3 id="exampleModalLabel">Requests</h3>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body" >
+                            <span *ngFor='let req of requests; index as i'>
+                                <ul class='list-group mb-5' *ngIf='protocol === "http" || protocol === "https"'>
+                                    <div class='row mb-3'>
+                                        <div class="col-md-4">
+                                            <a class='font-weight-bold'>Timestamp:</a>
+                                            {{ req["timestamp"] | date:'yyyy-MM-ddTHH:mm:ss'}}
+                                        </div>
+                                        <div class="col-md-2">
+                                            <a class='font-weight-bold '>Method:</a>
+                                            {{ req["method"] }}
+                                        </div>
+                                        <div class="col-md-2">
+                                            <a class='font-weight-bold '>Path:</a>
+                                            {{ req["path"] }}
+                                        </div>
+                                        <div class="col-md-2" *ngIf='!isEmpty(req["query"])'>
+                                            <a class='font-weight-bold'>Queries:</a>
+                                            {{ req["query"] | json}}
+                                        </div>
+                                    </div>                                           
+                                    <div class='list-group mb-2'>
+                                        <a class='font-weight-bold mb-2'>Headers</a>
+                                        <table class='table table-bordered table-responsive-md table-striped'>
+                                            <tbody>
+                                                <tr *ngFor='let k of keys[i]'>
+                                                    <td class='table-cell'>
+                                                        <a class="font-weight-bold">{{ k }}:</a>
+                                                        {{req["headers"][k]}}
+                                                    </td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                    <a class='font-weight-bold mb-2'>Body</a>
+                                    <li class='col list-group-item'>                                                
+                                        <pre class="list-group">{{ req["body"] | json }}</pre>
+                                    </li>
+                                </ul>
+                                <ul class='list-group mb-3' *ngIf='protocol !== "http" && protocol !== "https"'>
+                                    <li class='list-group-item'>
+                                        <a class='font-weight-bold'>Timestamp:</a>
+                                        {{ req["timestamp"] | date:'yyyy-MM-ddTHH:mm:ss'}}
+                                    </li>
+                                    <li class='list-group-item'>
+                                        <a class='font-weight-bold'>Data:</a>
+                                        {{ req["data"] }}
+                                    </li>
+                                </ul>
+                                <hr class='hline' />
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class='text-left mb-3 mr-3 mt-3'>
+            <h3>Stubs</h3>
+            <button class='btn no-border' (click)='onAddStub(imposter["port"])'>
+                <fa-icon [icon]='faPlusSquare'></fa-icon>                
+                <label class='ml-2 btnText'>New Stub</label>
+            </button>
+        </div>
+        <div class='ml-3 mr-3' *ngIf='imposter["stubs"].length > 0'>
+            <div class="texts row" *ngFor='let stub of minimizedImposter; index as i;'>
+                <div class='col-md-12 mt-2'>
+                    <div class='predicate-wrap' *ngFor='let min of stub["minPredicate"]'>
+                        <pre class='json'>{{ min }}</pre>
+                    </div>
+                </div>
+                <div class="col-md-6" colspan=2>                    
+                    <label class='dynamic-checkbox' for='see-more{{i}}'>
+                        <input class='stub-check' type='checkbox' id='see-more{{i}}' data-toggle='collapse' [attr.data-target]="'#stub'+i" />
+                        <fa-icon class='stub-down' [icon]='faCaretDown'></fa-icon>
+                        <fa-icon class='stub-up' [icon]='faCaretUp'></fa-icon>
+                        <label for='see-more{{i}}' class='mr-1 ml-2 see-more'><u>see more</u></label>
+                    </label>
+                </div>
+                <div class='col-md-6 text-right'>
+                    <label data-toggle="modal" [attr.data-target]="'#exampleModal'+i" class='btn-text mb-2 mr-2'><u>Stub Details</u></label>
+                    <button data-toggle="modal" [attr.data-target]="'#editModal'+i" class='btn no-border m-0 mb-2' (click)="reset(i)">
+                        <fa-icon [icon]='faPen'></fa-icon>
+                    </button>
+                    <button class='btn no-border m-0 mb-2' (click)='deleteStub(imposter["port"], i)'>
+                        <fa-icon [icon]='faTrash'></fa-icon>
+                    </button>
+                </div>
+                <div class="modal fade" id="exampleModal{{i}}" tabindex="-1" role="dialog"
+                    aria-labelledby="exampleModalLabel" aria-hidden="true">
+                    <div class="modal-dialog modal-xl">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="exampleModalLabel">Stub Details</h5>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <div class="modal-body">
+                                <form>
+                                    <div class="form-group">
+                                        <a class='font-weight-bold'>Stub Index:</a>
+                                        {{ i }}
+                                    </div>
+                                    <div *ngIf='imposter["stubs"][i]["description"]' class='form-group'>
+                                        <a class='font-weight-bold'>Stub Description:</a>
+                                        {{ imposter["stubs"][i]["description"] }}
+                                    </div>
+                                    <div class="form-group row">
+                                        <div class='col-md-6'>
+                                            <label class='align-middle font-weight-bold'>Predicates:</label>
+                                            <div class='d-flex'>
+                                                <textarea class='number wider txtA text-right' disabled #examplePredLines>{{ predicateLines[i] }}</textarea>
+                                                <textarea class='form-control txtA numberedTxt' rows=15 readonly wrap='off' #examplePredArea
+                                                    (scroll)='examplePredLines.scrollTop = examplePredArea.scrollTop'>{{ imposter["stubs"][i]["predicates"] | json}}</textarea>    
+                                            </div>
+                                        </div>
+                                        <div class='col-md-6'>
+                                            <label class='align-middle font-weight-bold'>Responses:</label>
+                                            <div class='d-flex'>
+                                                <textarea class='number wider txtA text-right' disabled #exampleRespLines>{{ responseLines[i] }}</textarea>
+                                                <textarea class='form-control txtA numberedTxt' rows=15 readonly wrap='off' #exampleRespArea
+                                                    (scroll)='exampleRespLines.scrollTop = exampleRespArea.scrollTop'>{{ imposter["stubs"][i]["responses"] | json}}</textarea>    
+                                            </div>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal fade" id="editModal{{i}}" tabindex="-1" role="dialog"
+                    aria-labelledby="exampleModalLabel" aria-hidden="true">
+                    <div class="modal-dialog modal-xl">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="exampleModalLabel">Stub Details</h5>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <div class="modal-body">
+                                <form>
+                                    <a class='font-weight-bold'>Stub Index: </a>
+                                    <label>{{ i }}</label>                                    
+                                    <div class="form-group row">
+                                        <div class='col-md-6'>
+                                            <label class='align-middle font-weight-bold' for='pred'>Predicates:</label>
+                                            <label class='invalid-field' *ngIf='!validPredicate'>&nbsp;*invalid predicate syntax</label>
+                                            <div class='d-flex'>
+                                                <textarea class='number wider txtA text-right' name='predLines' [(ngModel)]='editPredicateLines[i]' disabled #editPredLines [ngClass]="{'invalid': !validPredicate}"></textarea>
+                                                <textarea class='form-control txtA numberedTxt' [(ngModel)]='editPredicate' name='pred' rows=15 [ngClass]="{'is-invalid': !validPredicate}"
+                                                    #editPredArea (scroll)='editPredLines.scrollTop = editPredArea.scrollTop' (keyup)='onKey("pred", i)' wrap='off'></textarea>
+                                            </div>
+                                        </div>
+                                        <div class='col-md-6'>
+                                            <label class='align-middle font-weight-bold' for='resp'>Responses:</label>
+                                            <label class='invalid-field' *ngIf='!validResponse'>&nbsp;*invalid response syntax</label>
+                                            <div class='d-flex'>
+                                                <textarea class='number wider txtA text-right' name='respLines' [(ngModel)]='editResponseLines[i]' disabled #editRespLines [ngClass]="{'invalid': !validResponse}"></textarea>
+                                                <textarea class='form-control txtA numberedTxt' [(ngModel)]='editResponse' name='resp' rows=15 [ngClass]="{'is-invalid': !validResponse}"
+                                                    #editRespArea (scroll)='editRespLines.scrollTop = editRespArea.scrollTop' (keyup)='onKey("resp", i)' wrap='off'></textarea>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                            <div class="text-left mb-1">
+                                <button class="btn" data-dismiss="modal">Cancel</button>
+                                <button (click)="putStub(i)" class="btn active">Done</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="border col">
+                    <div class='collapse row' id='stub{{i}}'>
+                        <div class='col-md-6 mt-2 mb-2'>
+                            <label class='align-middle font-weight-bold'>Predicates:</label>
+                            <div class='d-flex'>
+                                <textarea class='number wider txtA text-right' disabled #seePredLines>{{ predicateLines[i] }}</textarea>
+                                <textarea class='form-control txtA numberedTxt' rows=8 readonly wrap='off' #seePredArea
+                                    (scroll)='seePredLines.scrollTop = seePredArea.scrollTop'>{{ imposter["stubs"][i]["predicates"] | json}}</textarea>    
+                            </div>
+                        </div>
+                        <div class='col-md-6 mt-2 mb-2'>
+                            <label class='align-middle font-weight-bold'>Responses:</label>
+                            <div class='d-flex'>
+                                <textarea class='number wider txtA text-right' disabled #seeRespLines>{{ responseLines[i] }}</textarea>
+                                <textarea class='form-control txtA numberedTxt' rows=8 readonly wrap='off' #seeRespArea
+                                    (scroll)='seeRespLines.scrollTop = seeRespArea.scrollTop'>{{ imposter["stubs"][i]["responses"] | json}}</textarea>    
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

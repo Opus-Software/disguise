@@ -1,0 +1,54 @@
+/* You can add global styles to this file, and also import other style files */
+@import "../node_modules/bootstrap/scss/bootstrap.scss"
+
+$main-color1: #66fcf1
+$main-color: #45a29e
+$black1: #212529
+$black2: #2b2f33
+$grey: #c5c6c8
+$red: #991c1c
+$green: #2ca12c
+
+.btn
+    color: $main-color
+    &:hover
+        color: $main-color
+.table
+    color: $grey
+.table-cell
+    background-color: $black2
+.card
+    background-color: $black1
+    margin-left: 1em
+    margin-right: 1em
+    border: none
+.card-header
+    color: white
+    border: none
+.card-body
+    border: none
+::ng-deep .pagination .page-link
+    background-color: $black1
+    color: white
+    border: none
+    &:hover
+        cursor: pointer
+        background-color: $black1
+::ng-deep .pagination 
+    > .page-item.active .page-link
+        color: $main-color
+        background-color: $black1
+        border: none
+    > .page-item.disabled .page-link
+        color: $grey
+        background-color: $black1
+.list-group-item
+    background-color: $black1
+    color: $grey
+    border-color: $grey
+.btn-tooltip .tooltip-inner
+    background-color: $main-color
+    color: $black1
+.invalid-field
+    font-style: italic
+    color: $red   

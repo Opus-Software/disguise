@@ -1,0 +1,11 @@
+<div class='mHeader'>
+    <h5 class='modal-title font-weight-bold'>{{ title }}</h5>
+</div>
+<div class='mBody'>
+    <span class='msg'>{{ message }}</span>
+    <input class='txtA' placeholder='Filename' type='text' [(ngModel)]='filename' />
+</div>
+<div class='mFooter text-right'>    
+    <button class='btn' (click)='decline()'>{{ btnCancelText }}</button>
+    <button class='btn font-weight-bold green' (click)='accept()' [disabled]="filename === ''">{{ btnOkText }}</button>
+</div>

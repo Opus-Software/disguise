@@ -1,0 +1,17 @@
+<div class='mHeader'>
+    <h5 class='modal-title font-weight-bold'>{{ title }}</h5>
+</div>
+<div class='mBody'>
+    <span>{{ message }}</span>
+    <div class='msg'>
+        <label for='upload-file' class='file-input'>
+            <a class='file-btn'>Choose the File</a>            
+        </label>     
+        <input class='filename text-center' type='text' [(ngModel)]='filename' ngDefaultControl disabled />
+        <input id='upload-file' class='type-file' type='file' (change)='onFileChanged($event)' />   
+    </div>
+</div>
+<div class='mFooter text-right'>    
+    <button class='btn' (click)='decline()'>{{ btnCancelText }}</button>
+    <button class='btn font-weight-bold green' (click)='accept()' [disabled]='!selectedFile'>{{ btnOkText }}</button>
+</div>

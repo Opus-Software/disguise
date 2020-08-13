@@ -1,0 +1,40 @@
+<div class='card'>
+    <h1 class='card-header font-weight-bold mt-3'>About</h1>
+    <div class='card-body'>
+        <h3 class='text'>Summary</h3>
+        <div class='text'>
+            Disguise is a project made with Angular that provides a user interface for the <a href='http://www.mbtest.org/'>Mountebank</a> server.
+            It facilitates the user interactions with the API and helps visualize and manage all the informations of the imposters and stubs in the server.
+            The source code for this application is located at <a href='https://github.com/Opus-Software/disguise'>https://github.com/Opus-Software/disguise</a>.
+        </div>
+        <h3 class='text mt-4'>Imposters Page</h3>
+        <div class='text'>
+            <div class='mb-3'>
+                This is the page where you can manage the imposters present in the Mountebank server. You can visualize the informations of all the imposters and their stubs, add new imposters and delete existing ones.
+                You can also add new singular stubs to imposters, edit and delete existing ones.
+            </div>
+            <div class='mb-3'>
+                You can export the actual state of the Mountebank server, saving all the current imposters and stubs to a json file. It is also possible to import a configuration json file, adding the imposters and stubs
+                defined in it to the running Mountebank server.
+            </div>
+            <div>
+                If an imposter has the attribute <a class='font-italic'>recordRequests</a> set to true, you can visualize all its recorded requests.
+                The requests are shown in a list with their respective informations like timestamp, headers and request body.
+            </div>
+        </div>
+        <h3 class='text mt-4'>Logs Page</h3>
+        <div class='text'>
+            <div>
+                This is the page where you can visualize all the logs returned by the Mountebank server. The logs are presented in a table where you can filter them by the port number, the type
+                of the log, the imposter related to the log and the log message.
+            </div>
+        </div>
+        <h3 class='text mt-4'>Server Location</h3>
+        <div class='text'>
+            <div>
+                The application assumes by default that the Mountebank server is running on the port 2525 on localhost. If the user wishes to change this, it is necessary to modify the source code,
+                changing the value of the <a class='font-italic'>mb</a> variable in the <a class='font-italic'>src/app/shared/constants.ts</a> file to the desired server location.
+            </div>
+        </div>
+    </div>
+</div>

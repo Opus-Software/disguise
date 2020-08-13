@@ -1,0 +1,108 @@
+<form novalidate [formGroup]="form">
+  <div class="card">
+    <span class='return'>
+      <a class='return-link' (click)='return()'>Imposters</a> / 
+      <a class='font-weight-bold'>New Imposter</a>
+  </span>
+    <h1 class='card-header font-weight-bold'>New Imposter</h1>
+    <div class='card-body'>
+      <div class="form-row">
+        <div class='col-md-2 mr-4'>
+          <label for="port"><b>Port</b></label>
+          <input type="text" class="txtA form-control" id="port" formControlName="port"
+            [ngClass]="{ 'is-invalid': submitted && hasError('port') }" placeholder="Imposter Port"/>
+          <div class="invalid-feedback" *ngIf="hasError('port') && hasError('port')['required']">
+            Please insert a valid port 
+          </div>          
+        </div>
+        <div class='col-md-2 mr-4'>
+          <label for="protocol"><b>Protocol</b></label>
+          <input type="text" class="txtA form-control" id="protocol" formControlName="protocol"
+            [ngClass]="{ 'is-invalid': submitted && hasError('protocol') }"  placeholder="Type of Protocol"/>
+          <div class="invalid-feedback" *ngIf="hasError('protocol') && hasError('protocol')['required']">
+            Please insert a valid protocol
+          </div>
+        </div>
+        <div class='col-md-4'>
+          <label for="name"><b>Name</b> (optional)</label>
+          <input type="text" class="txtA form-control" id="name"  placeholder="Name for the Imposter" formControlName="name" />
+        </div>
+      </div>
+      <br/> 
+      <div class="form-row">
+        <div class='col-md-2 mr-4'>
+          <a class='font-weight-bold'>Record Requests</a>          
+        </div>
+        <div class='cold-md-2'>
+          <a class='font-weight-bold'>Mutual Authentication</a>
+        </div>
+      </div>
+      <div class='form-row'>
+        <div class='col-md-2 mr-4'>
+          <input class='mr-1' type="radio" name='recordRequests' id='recordTrue' formControlName="recordRequests" value="true">
+          <label for='recordTrue'>True</label>
+          <input class='ml-2 mr-1' type="radio" name='recordRequests' id='recordFalse'  formControlName="recordRequests" value="false" checked>
+          <label for='recordFalse'>False</label>  
+        </div>
+        <div class="col-md-2">
+          <input class='mr-1' type="radio" name='mutualAuth' id='mutualTrue' formControlName="mutualAuth" value="true">
+          <label for='mutualTrue'>True</label>
+          <input class='ml-2 mr-1' type="radio" name='mutualAuth' id='mutualFalse'  formControlName="mutualAuth" value="false" checked>
+          <label for='mutualFalse'>False</label>
+        </div>
+      </div>
+      <br/>
+      <div class='form-row'>        
+          <div class='col-md-4 mr-5'>
+            <label class='font-weight-bold' for="key">Key</label>
+            <input type="text" class="txtA form-control" id="key" placeholder="Enter a Key" formControlName="key" />
+          </div>
+          <div class="col-md-4">
+            <label class='font-weight-bold' for="cert">Certificate</label>
+            <input type="text" class="txtA form-control" id="cert" placeholder="Enter a Certificate" formControlName="cert" />
+          </div>  
+      </div>
+      <br/>
+      <div class="form-row">
+        <div class="col-md-12">
+          <label for='defaultResponse'><b>Default Response</b></label>
+          <textarea class="txtA form-control" id="defaultResponse" formControlName="defaultResponse" rows=5
+            [ngClass]="{'is-invalid': submitted && hasError('defaultResponse')}" placeholder="Enter a Default Response"></textarea>
+          <div class='invalid-feedback' *ngIf='hasError("defaultResponse")'>
+            Please insert a valid object
+          </div>
+        </div>
+      </div>
+      <br/>
+      <div class="form-row">
+        <div class="col-md-12">
+          <label for="stubs"><b>Stubs</b></label>          
+          <textarea class="txtA form-control" id="stubs" formControlName="stubs" rows=7
+            [ngClass]="{'is-invalid': submitted && hasError('stubs')}" placeholder="Enter a Stub"></textarea>
+            <div class="invalid-feedback" *ngIf="hasError('stubs')">
+              Please insert a valid stubs object
+            </div>
+        </div>
+      </div>
+      <br/>
+      <div class='form-row'>
+        <div class='col-md-12'>
+          <label for='endOfRequest'><b>End of Request Resolver</b></label>
+          <textarea class='txtA form-control' id='endOfRequest' formControlName='endOfRequestResolver' rows=2
+            [ngClass]="{'is-invalid': submitted && hasError('endOfRequestResolver')}" placeholder="Enter a End of Request Resolver"></textarea>
+          <div class='invalid-feedback' *ngIf='hasError("endOfRequestResolver")'>
+            Please insert a valid object
+          </div>
+        </div>
+      </div>
+      <div class='text-left mt-2'>
+        <button type="cancel" class="btn" (click)="onCancel()">
+          Cancel
+        </button>
+        <button type="submit" class="btn active" (click)="onSubmit()">
+          Done
+        </button>        
+      </div>
+    </div>
+  </div>
+</form>

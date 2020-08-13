@@ -1,0 +1,10 @@
+<div class='mHeader'>
+    <h5 class='modal-title font-weight-bold'>{{ title }}</h5>
+</div>
+<div class='mBody'>
+    {{ message }}
+</div>
+<div class='mFooter text-right'>    
+    <button class='btn' (click)='decline()'>{{ btnCancelText }}</button>
+    <button class='btn font-weight-bold red' (click)='accept()'>{{ btnOkText }}</button>
+</div>
