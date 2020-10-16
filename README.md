@@ -1,6 +1,7 @@
 # Disguise
 
 Disguise is a project made with [Angular CLI](https://github.com/angular/angular-cli) version 9 that provides a user interface for the [Mountebank](http://www.mbtest.org/) server, facilitating the usage and interactions with the API.
+<center><img src="src/assets/images/diagram.png" width="450"/></center>
 
 ## Demonstration
 A demonstration of the Disguise application can be found at https://opus-software.github.io/disguise. The UI in this URL only listens to the Mountebank server hosted at http://localhost:2525. If you need to change the server location, you will have to setup the application locally.
