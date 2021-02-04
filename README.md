@@ -32,9 +32,14 @@ ng serve
 
 ### Setup
 
-The UI will be hosted in *http://localhost:4200* and the default port considered for the Mountebank server is 2525. To change the Mountebank location, modify the *mb* object in the *src/app/shared/constants.ts* file:
-```typescript
-public static mb = 'http://localhost:2525';
+The UI will be hosted in *http://localhost:4200* and the default port considered for the Mountebank server is 2525. To change the Mountebank location, modify the *target* property in the *src/proxy.conf.json* file:
+```json
+{
+    "/api": {
+        "target": "http://localhost:2525",
+        ...
+    }
+}
 ```
 
 ## Usage
