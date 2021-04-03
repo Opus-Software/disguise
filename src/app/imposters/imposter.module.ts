@@ -5,6 +5,8 @@ import { ImposterDetailComponent } from './imposter-detail.component';
 import { ImposterAddComponent } from './imposter-add.component';
 import { RouterModule } from '@angular/router';
 import { ReactiveFormsModule } from '@angular/forms';
+import { CodemirrorModule } from '@ctrl/ngx-codemirror';
+
 @NgModule({
   declarations: [
     ImposterListComponent,
@@ -18,7 +20,8 @@ import { ReactiveFormsModule } from '@angular/forms';
       { path: 'newImposter', component: ImposterAddComponent }
     ]),
     SharedModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    CodemirrorModule
   ]
 })
 

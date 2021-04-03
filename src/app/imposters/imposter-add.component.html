@@ -66,9 +66,8 @@
       <div class="form-row">
         <div class="col-md-12">
           <label for='defaultResponse'><b>Default Response</b></label>
-          <textarea class="txtA form-control" id="defaultResponse" formControlName="defaultResponse" rows=5
-            [ngClass]="{'is-invalid': submitted && hasError('defaultResponse')}" placeholder="Enter a Default Response"></textarea>
-          <div class='invalid-feedback' *ngIf='hasError("defaultResponse")'>
+          <ngx-codemirror id="defaultResponse" formControlName="defaultResponse" [ngClass]="{'is-invalid': submitted && hasError('defaultResponse')}" [options]="{lineNumbers: true,theme: 'material',mode: 'javascript'}"></ngx-codemirror>
+	  <div class='invalid-feedback' *ngIf='hasError("defaultResponse")'>
             Please insert a valid object
           </div>
         </div>
@@ -77,20 +76,18 @@
       <div class="form-row">
         <div class="col-md-12">
           <label for="stubs"><b>Stubs</b></label>          
-          <textarea class="txtA form-control" id="stubs" formControlName="stubs" rows=7
-            [ngClass]="{'is-invalid': submitted && hasError('stubs')}" placeholder="Enter a Stub"></textarea>
-            <div class="invalid-feedback" *ngIf="hasError('stubs')">
-              Please insert a valid stubs object
-            </div>
+          <ngx-codemirror id="stubs" formControlName="stubs" [ngClass]="{'is-invalid': submitted && hasError('stubs')}" [options]="{lineNumbers: true,theme: 'material',mode: 'javascript'}"></ngx-codemirror>
+	  <div class="invalid-feedback" *ngIf="hasError('stubs')">
+            Please insert a valid stubs object
+          </div>
         </div>
       </div>
       <br/>
       <div class='form-row'>
         <div class='col-md-12'>
           <label for='endOfRequest'><b>End of Request Resolver</b></label>
-          <textarea class='txtA form-control' id='endOfRequest' formControlName='endOfRequestResolver' rows=2
-            [ngClass]="{'is-invalid': submitted && hasError('endOfRequestResolver')}" placeholder="Enter a End of Request Resolver"></textarea>
-          <div class='invalid-feedback' *ngIf='hasError("endOfRequestResolver")'>
+         <ngx-codemirror id="endOfRequest" formControlName="endOfRequestResolver" [ngClass]="{'is-invalid': submitted && hasError('endOfRequestResolver')}" [options]="{lineNumbers: true,theme: 'material',mode: 'javascript'}"></ngx-codemirror>
+	  <div class='invalid-feedback' *ngIf='hasError("endOfRequestResolver")'>
             Please insert a valid object
           </div>
         </div>
