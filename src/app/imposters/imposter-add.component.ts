@@ -24,7 +24,7 @@ export class ImposterAddComponent implements OnInit {
             port: [null, [Validators.required, Validators.minLength(1)]],
             protocol: [null, [Validators.required, Validators.minLength(1)]],
             name: '',
-            recordRequests: '',
+            recordRequests: false,
             key: '',
             cert: '',
             mutualAuth: '',
