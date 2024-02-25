@@ -39,9 +39,9 @@
       </div>
       <div class='form-row'>
         <div class='col-md-2 mr-4'>
-          <input class='mr-1' type="radio" name='recordRequests' id='recordTrue' formControlName="recordRequests" value="true">
+          <input class='mr-1' type="radio" name='recordRequests' id='recordTrue' formControlName="recordRequests" [value]="true">
           <label for='recordTrue'>True</label>
-          <input class='ml-2 mr-1' type="radio" name='recordRequests' id='recordFalse'  formControlName="recordRequests" value="false" checked>
+          <input class='ml-2 mr-1' type="radio" name='recordRequests' id='recordFalse'  formControlName="recordRequests" [value]="false" checked>
           <label for='recordFalse'>False</label>  
         </div>
         <div class="col-md-2">
